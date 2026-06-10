@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String       @id @default(cuid())
+  name           String
+  email          String       @unique
+  hashedPassword String
+  region         String       @default("global")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  activities     Activity[]
+  goals          Goal[]
+  predictions    Prediction[]
+}
+
+model Activity {
+  id            String   @id @default(cuid())
+  userId        String
+  category      String
+  subCategory   String
+  amount        Float
+  unit          String
+  co2Amount     Float
+  gridIntensity Float?
+  isAnomaly     Boolean  @default(false)
+  date          DateTime
+  notes         String?
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([userId, category])
+}
+
+model Goal {
+  id              String   @id @default(cuid())
+  userId          String
+  targetReduction Float
+  baselineCo2     Float
+  startDate       DateTime
+  endDate         DateTime
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Prediction {
+  id           String   @id @default(cuid())
+  userId       String
+  predictedCo2 Float
+  period       String
+  targetDate   DateTime
+  confidence   Float
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, targetDate])
+}
+
+model CarbonIntensityCache {
+  id        String   @id @default(cuid())
+  region    String
+  intensity Float
+  fuelMix   String
+  fetchedAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([region, expiresAt])
+}

@@ -1,0 +1,20 @@
+/* CategoryChart – doughnut chart container */
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 360px;
+  margin: 0 auto;
+  padding: var(--spacing-md, 16px);
+  background: var(--bg-card, hsl(220, 16%, 16%));
+  border: 1px solid var(--border-color, hsl(220, 15%, 25%));
+  border-radius: var(--radius-lg, 16px);
+}
+
+@media (max-width: 640px) {
+  .container {
+    height: 300px;
+    padding: var(--spacing-sm, 8px);
+  }
+}

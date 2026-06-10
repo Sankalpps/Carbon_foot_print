@@ -1,0 +1,46 @@
+/* ProgressRing – animated SVG progress indicator */
+
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.svg {
+  display: block;
+}
+
+.track {
+  opacity: 0.3;
+}
+
+.progress {
+  transition: stroke-dashoffset var(--transition-slow, 400ms) ease-in-out;
+  will-change: stroke-dashoffset;
+}
+
+.textContainer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.label {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary, hsl(0, 0%, 95%));
+  line-height: 1.2;
+}
+
+.sublabel {
+  font-size: 0.6875rem;
+  color: var(--text-secondary, hsl(0, 0%, 70%));
+  margin-top: 2px;
+  line-height: 1.2;
+}

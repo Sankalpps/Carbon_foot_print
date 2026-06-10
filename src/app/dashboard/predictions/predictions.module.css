@@ -1,0 +1,228 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.header {
+  margin-bottom: var(--spacing-sm);
+}
+
+.title {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+.alertsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.insufficientCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  gap: var(--spacing-md);
+}
+
+.insufficientIcon {
+  font-size: var(--font-size-5xl);
+}
+
+.progressContainer {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin: var(--spacing-md) 0;
+}
+
+.progressLabel {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.progressTrack {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  height: 12px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
+}
+
+.ctaLink {
+  color: var(--color-primary-light);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.ctaLink:hover {
+  color: var(--color-primary);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chartArea {
+  width: 100%;
+}
+
+.chartCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.cardTitle {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.emptyChart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+}
+
+.modelPanel {
+  width: 100%;
+}
+
+.modelCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.helpSection {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.helpText {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.statusItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color-light);
+  padding-bottom: var(--spacing-sm);
+}
+
+.statusLabel {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.statusValue {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.statusBadge {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.statusTrained {
+  background: var(--color-primary-alpha);
+  color: var(--color-primary-light);
+  border: 1px solid var(--color-primary);
+}
+
+.statusNotTrained {
+  background: var(--color-danger-alpha);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+}
+
+.trainingProgress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.trainingHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.trainingTrack {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  height: 10px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.trainingFill {
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 150ms linear;
+}
+
+.lossLabel {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-align: right;
+}

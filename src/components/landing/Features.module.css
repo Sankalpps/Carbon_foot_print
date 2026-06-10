@@ -1,0 +1,128 @@
+.section {
+  padding: 6rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.01em;
+}
+
+.sectionSubtitle {
+  font-size: 1.0625rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Feature card ── */
+
+.card {
+  padding: 2rem;
+  background: hsla(220, 16%, 16%, 0.55);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition:
+    transform var(--transition-normal) ease,
+    box-shadow var(--transition-normal) ease,
+    border-color var(--transition-normal) ease;
+
+  /* entrance animation setup */
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.cardVisible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    transform var(--transition-slow) ease,
+    box-shadow var(--transition-normal) ease,
+    border-color var(--transition-normal) ease,
+    opacity var(--transition-slow) ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.cardVisible:hover {
+  transform: translateY(-4px);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.25rem;
+}
+
+.iconAI {
+  background-color: hsla(200, 85%, 55%, 0.12);
+  color: var(--color-accent);
+}
+
+.iconGrid {
+  background-color: hsla(152, 68%, 42%, 0.12);
+  color: var(--color-primary);
+}
+
+.iconInsights {
+  background-color: hsla(280, 60%, 55%, 0.12);
+  color: hsl(280, 60%, 55%);
+}
+
+.iconTrack {
+  background-color: hsla(38, 92%, 50%, 0.12);
+  color: var(--color-warning);
+}
+
+.iconInner {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.cardDescription {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.65;
+}

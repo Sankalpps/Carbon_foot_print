@@ -1,0 +1,187 @@
+.container {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 400px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
+  animation: slideIn var(--transition-normal) ease forwards;
+  position: relative;
+}
+
+.toastExiting {
+  animation: slideOut var(--transition-fast) ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(110%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(110%);
+    opacity: 0;
+  }
+}
+
+/* ── Type borders ── */
+
+.success {
+  border-left: 3px solid var(--color-primary);
+}
+
+.error {
+  border-left: 3px solid var(--color-danger);
+}
+
+.warning {
+  border-left: 3px solid var(--color-warning);
+}
+
+.info {
+  border-left: 3px solid var(--color-accent);
+}
+
+/* ── Icon ── */
+
+.icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.125rem;
+}
+
+.success .icon {
+  color: var(--color-primary);
+}
+
+.error .icon {
+  color: var(--color-danger);
+}
+
+.warning .icon {
+  color: var(--color-warning);
+}
+
+.info .icon {
+  color: var(--color-accent);
+}
+
+/* ── Content ── */
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.toastTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.125rem 0;
+}
+
+.message {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Dismiss ── */
+
+.dismiss {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast) ease,
+    background-color var(--transition-fast) ease;
+}
+
+.dismiss:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+}
+
+.dismiss:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.dismissIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* ── Progress bar ── */
+
+.progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 0 0 0 var(--radius-md);
+  animation: progressShrink 5s linear forwards;
+}
+
+.success .progress {
+  background-color: var(--color-primary);
+}
+
+.error .progress {
+  background-color: var(--color-danger);
+}
+
+.warning .progress {
+  background-color: var(--color-warning);
+}
+
+.info .progress {
+  background-color: var(--color-accent);
+}
+
+@keyframes progressShrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

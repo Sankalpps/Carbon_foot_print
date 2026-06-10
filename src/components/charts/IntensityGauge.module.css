@@ -1,0 +1,68 @@
+/* IntensityGauge – semicircle gauge styles */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--spacing-md, 16px);
+  background: var(--bg-card, hsl(220, 16%, 16%));
+  border: 1px solid var(--border-color, hsl(220, 15%, 25%));
+  border-radius: var(--radius-lg, 16px);
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.label {
+  font-size: 0.8125rem;
+  color: var(--text-secondary, hsl(0, 0%, 70%));
+  font-weight: 500;
+  text-align: center;
+}
+
+.svg {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  overflow: visible;
+}
+
+.filledArc {
+  transition: stroke-dashoffset var(--transition-slow, 400ms) ease-in-out,
+              stroke var(--transition-normal, 250ms) ease;
+  will-change: stroke-dashoffset;
+}
+
+.needle {
+  transition: x2 var(--transition-slow, 400ms) ease-in-out,
+              y2 var(--transition-slow, 400ms) ease-in-out;
+  will-change: x2, y2;
+}
+
+.readout {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: -4px;
+}
+
+.value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  font-size: 0.75rem;
+  color: var(--text-muted, hsl(0, 0%, 50%));
+  font-weight: 500;
+}
+
+.severity {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

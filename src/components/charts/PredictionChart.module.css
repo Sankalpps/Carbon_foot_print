@@ -1,0 +1,22 @@
+/* PredictionChart – prediction line chart container */
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  height: 380px;
+  padding: var(--spacing-md, 16px);
+  padding-top: calc(var(--spacing-md, 16px) + 8px);
+  background: var(--bg-card, hsl(220, 16%, 16%));
+  border: 1px solid var(--border-color, hsl(220, 15%, 25%));
+  border-radius: var(--radius-lg, 16px);
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .container {
+    height: 280px;
+    min-height: 240px;
+    padding: var(--spacing-sm, 8px);
+  }
+}
