@@ -1,6 +1,9 @@
-import { auth } from '@/lib/auth';
+import NextAuth from 'next-auth';
+import { authConfig } from '@/lib/auth.config';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+
+const { auth } = NextAuth(authConfig);
 
 /**
  * Middleware to protect dashboard routes.
@@ -8,6 +11,7 @@ import type { NextRequest } from 'next/server';
  */
 export default async function middleware(request: NextRequest) {
   const session = await auth();
+
 
   const isAuthPage =
     request.nextUrl.pathname.startsWith('/login') ||
