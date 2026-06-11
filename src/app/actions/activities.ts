@@ -40,7 +40,8 @@ export async function addActivity(formData: FormData): Promise<ActionResult> {
     return { success: true };
   } catch (error) {
     console.error('Add activity error:', error);
-    return { success: false, error: 'Failed to add activity' };
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return { success: false, error: `Failed to add activity: ${errorMessage}` };
   }
 }
 
