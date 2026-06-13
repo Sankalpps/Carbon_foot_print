@@ -5,11 +5,8 @@ import { createGoal } from '@/lib/dal/goals';
 import { goalSchema } from '@/lib/validations';
 import { getActivityStats } from '@/lib/dal/activities';
 import { revalidatePath } from 'next/cache';
+import type { ActionResult } from '@/types/actions';
 
-export interface ActionResult {
-  success: boolean;
-  error?: string;
-}
 
 /**
  * Set a carbon reduction goal.

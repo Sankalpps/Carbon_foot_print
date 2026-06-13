@@ -10,25 +10,28 @@ const { auth } = NextAuth(authConfig);
  * Redirects unauthenticated users to /login.
  */
 export default async function middleware(request: NextRequest) {
-  const session = await auth();
+  try {
+    const session = await auth();
 
+    const isAuthPage =
+      request.nextUrl.pathname.startsWith('/login') ||
+      request.nextUrl.pathname.startsWith('/register');
 
-  const isAuthPage =
-    request.nextUrl.pathname.startsWith('/login') ||
-    request.nextUrl.pathname.startsWith('/register');
+    const isDashboard = request.nextUrl.pathname.startsWith('/dashboard');
 
-  const isDashboard = request.nextUrl.pathname.startsWith('/dashboard');
+    // Redirect authenticated users away from auth pages
+    if (isAuthPage && session) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
 
-  // Redirect authenticated users away from auth pages
-  if (isAuthPage && session) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-
-  // Redirect unauthenticated users to login
-  if (isDashboard && !session) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname);
-    return NextResponse.redirect(loginUrl);
+    // Redirect unauthenticated users to login
+    if (isDashboard && !session) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  } catch (error) {
+    console.error('Middleware error:', error);
   }
 
   // Add security headers

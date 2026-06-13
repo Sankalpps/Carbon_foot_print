@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { signOut } from 'next-auth/react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import LiveIntensityBanner from '@/components/dashboard/LiveIntensityBanner';
@@ -18,7 +18,6 @@ export function DashboardShell({
   userName,
   userEmail,
 }: DashboardShellProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const { intensity, status, isConnected } = useRealTimeCarbon();
 
   const handleLogout = async () => {

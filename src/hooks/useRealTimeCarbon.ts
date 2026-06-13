@@ -1,8 +1,15 @@
 'use client';
 
+/**
+ * @fileoverview useRealTimeCarbon hook - Subscribes to live SSE stream for carbon intensity data.
+ */
+
 import { useEffect, useState } from 'react';
 import type { GridData } from '@/lib/carbon/grid-service';
 
+/**
+ * Custom hook to listen to real-time grid carbon intensity.
+ */
 export interface UseRealTimeCarbonResult {
   intensity: number;
   status: 'low' | 'moderate' | 'high';

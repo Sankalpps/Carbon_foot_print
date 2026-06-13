@@ -44,7 +44,7 @@ export default function Input({
   ...rest
 }: InputProps) {
   const generatedId = useId();
-  const inputId = `input-${name}-${generatedId}`;
+  const inputId = rest.id || `input-${name}-${generatedId}`;
   const errorId = `error-${name}-${generatedId}`;
   const helperId = `helper-${name}-${generatedId}`;
 

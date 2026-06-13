@@ -2,18 +2,20 @@
  * Model Manager - Handles model lifecycle with IndexedDB persistence.
  */
 import * as tf from '@tensorflow/tfjs';
+import type { NormalizationParams } from './data-pipeline';
 
 const MODEL_PREFIX = 'indexeddb://carbonwise-model-';
 const METADATA_KEY = 'carbonwise-model-metadata';
 
-interface ModelMetadata {
+export interface ModelMetadata {
   userId: string;
   lastTrainedAt: string;
   epochs: number;
   loss: number;
   dataPointsUsed: number;
-  normParams: any;
+  normParams: NormalizationParams;
 }
+
 
 /**
  * Save a trained model to IndexedDB.

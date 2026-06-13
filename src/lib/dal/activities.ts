@@ -151,8 +151,60 @@ export async function deleteActivity(userId: string, activityId: string) {
 }
 
 /**
+ * Update an existing activity (with ownership check).
+ */
+export async function updateActivity(
+  userId: string,
+  activityId: string,
+  data: Partial<ActivityInput>
+) {
+  const activity = await db.activity.findUnique({
+    where: { id: activityId },
+  });
+
+  if (!activity || activity.userId !== userId) {
+    throw new Error('Activity not found or unauthorized');
+  }
+
+  const updateData: Record<string, unknown> = {};
+  
+  if (data.category !== undefined) updateData.category = data.category;
+  if (data.subCategory !== undefined) {
+    updateData.subCategory = data.subCategory;
+    updateData.unit = getUnit(data.subCategory);
+  }
+  if (data.amount !== undefined && data.subCategory) {
+    updateData.amount = data.amount;
+    updateData.co2Amount = calculateCO2(data.subCategory, data.amount);
+  } else if (data.amount !== undefined) {
+    updateData.amount = data.amount;
+    updateData.co2Amount = calculateCO2(activity.subCategory, data.amount);
+  }
+  if (data.date !== undefined) updateData.date = data.date;
+  if (data.notes !== undefined) updateData.notes = data.notes;
+
+  return db.activity.update({
+    where: { id: activityId },
+    data: updateData,
+  });
+}
+
+/**
  * Get activity count for a user.
  */
 export async function getActivityCount(userId: string) {
   return db.activity.count({ where: { userId } });
 }
+
+/**
+ * Get activities for a user within a specific date range.
+ */
+export async function getActivitiesByDateRange(userId: string, startDate: Date, endDate: Date) {
+  return db.activity.findMany({
+    where: {
+      userId,
+      date: { gte: startDate, lt: endDate },
+    },
+  });
+}
+

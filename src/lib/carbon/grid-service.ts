@@ -97,10 +97,16 @@ export async function getLatestGridData(): Promise<GridData> {
     });
 
     if (cached) {
+      let fuelMix = [];
+      try {
+        fuelMix = JSON.parse(cached.fuelMix);
+      } catch (e) {
+        console.error('Failed to parse cached fuel mix:', e);
+      }
       return {
         intensity: cached.intensity,
         status: cached.intensity <= 100 ? 'low' : cached.intensity >= 250 ? 'high' : 'moderate',
-        fuelMix: JSON.parse(cached.fuelMix),
+        fuelMix,
         fetchedAt: cached.fetchedAt,
       };
     }

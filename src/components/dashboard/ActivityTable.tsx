@@ -74,14 +74,12 @@ export default function ActivityTable({ activities }: ActivityTableProps) {
 
     // Sort
     result.sort((a, b) => {
-      let valA: any = a[sortField];
-      let valB: any = b[sortField];
-
-      // Format date if string
-      if (sortField === 'date') {
-        valA = new Date(valA).getTime();
-        valB = new Date(valB).getTime();
-      }
+      const valA: string | number = sortField === 'date' 
+        ? new Date(a.date).getTime() 
+        : (a[sortField] as string | number);
+      const valB: string | number = sortField === 'date' 
+        ? new Date(b.date).getTime() 
+        : (b[sortField] as string | number);
 
       if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
       if (valA > valB) return sortOrder === 'asc' ? 1 : -1;

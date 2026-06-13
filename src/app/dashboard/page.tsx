@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { getActivityStats, getMonthlyBreakdown, getActivities } from '@/lib/dal/activities';
+import { getActivityStats, getMonthlyBreakdown, getActivities, getActivitiesByDateRange } from '@/lib/dal/activities';
 import { getGoalProgress } from '@/lib/dal/goals';
 import { getCategoryBreakdown } from '@/lib/carbon/calculator';
 import StatCard from '@/components/dashboard/StatCard';
@@ -31,12 +30,7 @@ export default async function DashboardPage() {
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
   
-  const lastMonthActivities = await db.activity.findMany({
-    where: {
-      userId,
-      date: { gte: sixtyDaysAgo, lt: thirtyDaysAgo },
-    },
-  });
+  const lastMonthActivities = await getActivitiesByDateRange(userId, sixtyDaysAgo, thirtyDaysAgo);
   
   const lastMonthCO2 = lastMonthActivities.reduce((sum, a) => sum + a.co2Amount, 0);
 

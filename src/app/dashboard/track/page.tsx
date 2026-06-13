@@ -19,7 +19,12 @@ export default async function TrackPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Track Emissions</h1>
+        <div className={styles.headerTop}>
+          <h1 className={styles.title}>Track Emissions</h1>
+          <a href="/api/export" download className={styles.exportButton}>
+            Export CSV
+          </a>
+        </div>
         <p className={styles.subtitle}>
           Log your daily commute, energy use, meals, and purchases to track your carbon footprint.
         </p>

@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * @fileoverview GoalForm Component - Renders form to set carbon reduction targets.
+ */
+
 import { useState, useTransition } from 'react';
 import { setGoal } from '@/app/actions/goals';
 import { useToast } from '@/components/ui/Toast';
@@ -8,6 +12,9 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import styles from './GoalForm.module.css';
 
+/**
+ * GoalForm Component - Renders goal creation and configuration UI.
+ */
 export default function GoalForm() {
   const { addToast } = useToast();
   const [isPending, startTransition] = useTransition();

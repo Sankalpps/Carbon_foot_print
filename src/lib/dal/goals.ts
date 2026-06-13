@@ -59,7 +59,10 @@ export async function getGoalProgress(userId: string) {
 
   const currentMonthTotal = activities.reduce((sum, a) => sum + a.co2Amount, 0);
   const targetCo2 = goal.baselineCo2 * (1 - goal.targetReduction / 100);
-  const progress = Math.min(100, Math.round(((goal.baselineCo2 - currentMonthTotal) / (goal.baselineCo2 - targetCo2)) * 100));
+  const divisor = goal.baselineCo2 - targetCo2;
+  const progress = divisor === 0 
+    ? 100 
+    : Math.min(100, Math.round(((goal.baselineCo2 - currentMonthTotal) / divisor) * 100));
 
   return {
     goal,

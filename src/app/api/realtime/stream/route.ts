@@ -1,8 +1,14 @@
+import { auth } from '@/lib/auth';
 import { getLatestGridData } from '@/lib/carbon/grid-service';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({

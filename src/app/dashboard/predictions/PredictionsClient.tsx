@@ -3,8 +3,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import { aggregateDailyEmissions, prepareTrainingData } from '@/lib/ml/data-pipeline';
+import type { NormalizationParams } from '@/lib/ml/data-pipeline';
 import { trainModel, predictFuture, type PredictionResult } from '@/lib/ml/predictor';
-import { saveModel, loadModel, getModelMetadata } from '@/lib/ml/model-manager';
+import { saveModel, loadModel, getModelMetadata, type ModelMetadata } from '@/lib/ml/model-manager';
 import { detectAnomalies } from '@/lib/ml/anomaly-detector';
 import PredictionChart from '@/components/charts/PredictionChart';
 import AnomalyAlert from '@/components/dashboard/AnomalyAlert';
@@ -17,6 +18,14 @@ interface ActivityItem {
   category: string;
   subCategory: string;
   co2Amount: number;
+  date: string;
+}
+
+interface Anomaly {
+  id: string;
+  category: string;
+  actualValue: number;
+  expectedValue: number;
   date: string;
 }
 
@@ -40,12 +49,13 @@ export default function PredictionsClient({ activities, userId }: PredictionsCli
 
   // States
   const [model, setModel] = useState<tf.Sequential | null>(null);
-  const [metadata, setMetadata] = useState<any>(null);
+  const [metadata, setMetadata] = useState<ModelMetadata | null>(null);
   const [isTraining, setIsTraining] = useState(false);
   const [trainingEpoch, setTrainingEpoch] = useState(0);
   const [trainingLoss, setTrainingLoss] = useState(0);
   const [predictions, setPredictions] = useState<PredictionResult | null>(null);
-  const [anomalies, setAnomalies] = useState<any[]>([]);
+  const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
+
 
   // 1. Check if we have enough data (need at least 14 days of logged daily history)
   const isDataSufficient = dailyData.length >= 14;
@@ -98,7 +108,7 @@ export default function PredictionsClient({ activities, userId }: PredictionsCli
   }, [parsedActivities]);
 
   // Run forecasting on the model
-  const runForecasting = (trainedModel: tf.Sequential, normParams: any) => {
+  const runForecasting = (trainedModel: tf.Sequential, normParams: NormalizationParams) => {
     const prepared = prepareTrainingData(parsedActivities, 7);
     if (!prepared) return;
 
@@ -136,7 +146,8 @@ export default function PredictionsClient({ activities, userId }: PredictionsCli
       });
 
       if (result) {
-        const metadataPayload = {
+        const metadataPayload: ModelMetadata = {
+          userId,
           lastTrainedAt: new Date().toISOString(),
           epochs: 50,
           loss: result.loss,
