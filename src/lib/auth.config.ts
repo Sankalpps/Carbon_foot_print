@@ -1,6 +1,11 @@
 import type { NextAuthConfig } from 'next-auth';
 
-if (process.env.NODE_ENV === 'production' && !process.env.AUTH_SECRET && !process.env.NEXTAUTH_SECRET) {
+if (
+  process.env.NODE_ENV === 'production' &&
+  !process.env.AUTH_SECRET &&
+  !process.env.NEXTAUTH_SECRET &&
+  process.env.NEXT_PHASE !== 'phase-production-build'
+) {
   throw new Error('AUTH_SECRET environment variable is required in production');
 }
 
