@@ -3,7 +3,6 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 const mockFit = vi.fn();
 const mockPredict = vi.fn();
 const mockDispose = vi.fn();
-const mockDataSync = vi.fn();
 
 const mockSequentialModel = {
   add: vi.fn(),
@@ -23,10 +22,10 @@ vi.mock('@tensorflow/tfjs', () => {
     train: {
       adam: vi.fn(() => ({ type: 'adam' })),
     },
-    tensor3d: vi.fn((data: unknown) => ({
+    tensor3d: vi.fn((_data: unknown) => ({
       dispose: mockDispose,
     })),
-    tensor2d: vi.fn((data: unknown, shape?: unknown) => ({
+    tensor2d: vi.fn((_data: unknown, _shape?: unknown) => ({
       dispose: mockDispose,
     })),
   };
@@ -118,7 +117,7 @@ describe('Predictor', () => {
 
       mockDenormalizeData.mockReturnValue([5.0]); // 0.5 * 10 = 5
 
-      const result = predictFuture(mockSequentialModel as any, recentData, normParams, 3);
+      const result = predictFuture(mockSequentialModel as unknown as tf.Sequential, recentData, normParams, 3);
 
       expect(result.predictions).toEqual([5, 5, 5]);
       expect(result.labels).toHaveLength(3);

@@ -66,7 +66,7 @@ describe('Anomaly Detector', () => {
 
   describe('detectAnomalies', () => {
     it('should return empty array when no anomalies found', () => {
-      const activities = Array.from({ length: 10 }, (_, i) => ({
+      const activities = Array.from({ length: 10 }, (_) => ({
         category: 'transport',
         co2Amount: 10,
         date: new Date(),

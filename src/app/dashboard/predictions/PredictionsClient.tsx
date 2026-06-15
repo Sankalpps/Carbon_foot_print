@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import { aggregateDailyEmissions, prepareTrainingData } from '@/lib/ml/data-pipeline';
 import type { NormalizationParams } from '@/lib/ml/data-pipeline';
@@ -82,7 +82,7 @@ export default function PredictionsClient({ activities, userId }: PredictionsCli
     }
 
     initModel();
-  }, [isDataSufficient, userId]);
+  }, [isDataSufficient, userId, runForecasting]);
 
   // 3. Compute anomalies
   useEffect(() => {
@@ -108,7 +108,7 @@ export default function PredictionsClient({ activities, userId }: PredictionsCli
   }, [parsedActivities]);
 
   // Run forecasting on the model
-  const runForecasting = (trainedModel: tf.Sequential, normParams: NormalizationParams) => {
+  const runForecasting = useCallback((trainedModel: tf.Sequential, normParams: NormalizationParams) => {
     const prepared = prepareTrainingData(parsedActivities, 7);
     if (!prepared) return;
 
@@ -131,7 +131,7 @@ export default function PredictionsClient({ activities, userId }: PredictionsCli
 
     const result = predictFuture(trainedModel, normalizedInput, normParams, 7);
     setPredictions(result);
-  };
+  }, [parsedActivities]);
 
   // Triggers browser LSTM neural network training
   const handleTrain = async () => {

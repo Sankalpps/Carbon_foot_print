@@ -2,7 +2,7 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 const { mockValues } = vi.hoisted(() => ({
   mockValues: {
-    mockAuthorize: null as any,
+    mockAuthorize: null as unknown as ((credentials: Record<string, unknown>) => Promise<Record<string, unknown> | null>) | null,
   },
 }));
 
@@ -23,10 +23,11 @@ vi.mock('bcryptjs', () => ({
 
 vi.mock('next-auth', () => {
   return {
-    default: vi.fn((config: any) => {
+    default: vi.fn((config: Record<string, unknown>) => {
       // Find credentials provider and grab authorize function
-      const credentialsProvider = config.providers.find((p: any) => p.id === 'credentials' || p.name === 'credentials');
-      mockValues.mockAuthorize = credentialsProvider?.authorize;
+      const providers = (config.providers || []) as Record<string, unknown>[];
+      const credentialsProvider = providers.find((p) => p.id === 'credentials' || p.name === 'credentials');
+      mockValues.mockAuthorize = credentialsProvider?.authorize as unknown as ((credentials: Record<string, unknown>) => Promise<Record<string, unknown> | null>);
       return {
         handlers: {},
         signIn: vi.fn(),
@@ -39,7 +40,7 @@ vi.mock('next-auth', () => {
 
 vi.mock('next-auth/providers/credentials', () => {
   return {
-    default: vi.fn((config: any) => ({
+    default: vi.fn((config: Record<string, unknown>) => ({
       id: 'credentials',
       name: 'credentials',
       ...config,
@@ -65,7 +66,7 @@ describe('auth callbacks & config', () => {
       const token = {};
       const user = { id: 'user_123' };
 
-      const result = await jwtCallback({ token, user } as any);
+      const result = await jwtCallback({ token, user } as unknown as Parameters<NonNullable<typeof authConfig.callbacks.jwt>>[0]);
       expect(result).toEqual({ id: 'user_123' });
     });
 
@@ -76,7 +77,7 @@ describe('auth callbacks & config', () => {
       const session = { user: { name: 'John' } };
       const token = { id: 'user_123' };
 
-      const result = await sessionCallback({ session, token } as any);
+      const result = await sessionCallback({ session, token } as unknown as Parameters<NonNullable<typeof authConfig.callbacks.session>>[0]);
       expect(result.user.id).toBe('user_123');
     });
 

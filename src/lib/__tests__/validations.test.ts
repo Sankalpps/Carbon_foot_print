@@ -176,7 +176,8 @@ describe('Validations', () => {
     });
 
     it('should reject missing name', () => {
-      const { name, ...rest } = validInput;
+      const rest = { ...validInput } as Partial<typeof validInput>;
+      delete rest.name;
       const result = registerSchema.safeParse(rest);
       expect(result.success).toBe(false);
     });
@@ -220,7 +221,8 @@ describe('Validations', () => {
     });
 
     it('should reject missing category', () => {
-      const { category, ...rest } = validActivity;
+      const rest = { ...validActivity } as Partial<typeof validActivity>;
+      delete rest.category;
       const result = activitySchema.safeParse(rest);
       expect(result.success).toBe(false);
     });
@@ -252,7 +254,8 @@ describe('Validations', () => {
     });
 
     it('should accept activity without notes', () => {
-      const { notes, ...rest } = validActivity;
+      const rest = { ...validActivity } as Partial<typeof validActivity>;
+      delete rest.notes;
       const result = activitySchema.safeParse(rest);
       expect(result.success).toBe(true);
     });

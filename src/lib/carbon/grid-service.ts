@@ -112,7 +112,7 @@ export async function getLatestGridData(): Promise<GridData> {
     }
 
     // Cache expired or missing, fetch fresh data from API
-    console.log('Fetching live carbon intensity data from API...');
+    console.warn('Fetching live carbon intensity data from API...');
     const [intensityRes, generationRes] = await Promise.all([
       fetch(`${API_URL}/intensity`, { signal: AbortSignal.timeout(4000) }),
       fetch(`${API_URL}/generation`, { signal: AbortSignal.timeout(4000) }),

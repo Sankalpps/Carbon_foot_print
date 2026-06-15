@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 const mockSave = vi.fn();
 
@@ -55,7 +55,7 @@ describe('Model Manager', () => {
   describe('loadModel', () => {
     it('should call loadLayersModel and return model', async () => {
       const mockModel = { id: 'loaded-model' };
-      vi.mocked(tf.loadLayersModel).mockResolvedValue(mockModel as any);
+      vi.mocked(tf.loadLayersModel).mockResolvedValue(mockModel as unknown as tf.Sequential);
 
       const result = await loadModel('user123');
 
@@ -155,7 +155,7 @@ describe('Model Manager', () => {
   describe('deleteModel', () => {
     it('should remove model from storage and clear metadata', async () => {
       localStorage.setItem('carbonwise-model-metadata-user123', 'metadata');
-      vi.mocked(tf.io.removeModel).mockResolvedValue({} as any);
+      vi.mocked(tf.io.removeModel).mockResolvedValue({} as unknown as void);
 
       await deleteModel('user123');
 

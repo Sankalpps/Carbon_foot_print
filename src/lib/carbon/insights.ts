@@ -1,6 +1,5 @@
-import { getCategoryBreakdown, getSubCategoryTotals, GLOBAL_MONTHLY_AVERAGE_KG, getEquivalents } from './calculator';
+import { getCategoryBreakdown, getSubCategoryTotals, GLOBAL_MONTHLY_AVERAGE_KG } from './calculator';
 import type { Category } from '@/lib/validations';
-import { CATEGORY_META } from './emission-factors';
 
 interface Activity {
   id: string;

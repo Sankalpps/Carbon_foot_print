@@ -250,7 +250,6 @@ describe('Activities DAL', () => {
 
     it('should aggregate activities by month', async () => {
       const now = new Date();
-      const currentMonth = now.toISOString().slice(0, 7);
       mockFindMany.mockResolvedValue([
         { date: now, co2Amount: 10 },
         { date: now, co2Amount: 20 },

@@ -10,7 +10,7 @@ export async function GET() {
   }
 
   const encoder = new TextEncoder();
-  let interval: any;
+  let interval: ReturnType<typeof setInterval> | undefined;
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -19,7 +19,7 @@ export async function GET() {
         try {
           const data = await getLatestGridData();
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
-        } catch (err) {
+        } catch {
           // Stream is closed, stop interval
           clearInterval(interval);
         }

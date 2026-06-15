@@ -3,7 +3,6 @@
  * Detects unusual emission spikes in user's activity data.
  */
 import * as tf from '@tensorflow/tfjs';
-import { normalizeData } from './data-pipeline';
 
 const ANOMALY_THRESHOLD = 2.0; // Standard deviations above mean reconstruction error
 
