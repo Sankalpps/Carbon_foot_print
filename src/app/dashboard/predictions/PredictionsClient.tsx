@@ -60,6 +60,32 @@ export default function PredictionsClient({ activities, userId }: PredictionsCli
   // 1. Check if we have enough data (need at least 14 days of logged daily history)
   const isDataSufficient = dailyData.length >= 14;
 
+  // Run forecasting on the model
+  const runForecasting = useCallback((trainedModel: tf.Sequential, normParams: NormalizationParams) => {
+    const prepared = prepareTrainingData(parsedActivities, 7);
+    if (!prepared) return;
+
+    // Extract raw multi-feature inputs from daily data for the last 7 days
+    const recentRaw = prepared.dailyData.slice(-7).map((d) => [
+      d.transport,
+      d.energy,
+      d.food,
+      d.shopping,
+      d.total,
+    ]);
+
+    // Normalize input using the saved min/max values
+    const min = normParams.min;
+    const max = normParams.max;
+    const range = max - min || 1;
+    const normalizedInput = recentRaw.map((row) =>
+      row.map((val) => (val - min) / range)
+    );
+
+    const result = predictFuture(trainedModel, normalizedInput, normParams, 7);
+    setPredictions(result);
+  }, [parsedActivities]);
+
   // 2. Load model from IndexedDB on mount
   useEffect(() => {
     if (!isDataSufficient) return;
@@ -105,32 +131,6 @@ export default function PredictionsClient({ activities, userId }: PredictionsCli
       });
       setAnomalies(mapped);
     }
-  }, [parsedActivities]);
-
-  // Run forecasting on the model
-  const runForecasting = useCallback((trainedModel: tf.Sequential, normParams: NormalizationParams) => {
-    const prepared = prepareTrainingData(parsedActivities, 7);
-    if (!prepared) return;
-
-    // Extract raw multi-feature inputs from daily data for the last 7 days
-    const recentRaw = prepared.dailyData.slice(-7).map((d) => [
-      d.transport,
-      d.energy,
-      d.food,
-      d.shopping,
-      d.total,
-    ]);
-
-    // Normalize input using the saved min/max values
-    const min = normParams.min;
-    const max = normParams.max;
-    const range = max - min || 1;
-    const normalizedInput = recentRaw.map((row) =>
-      row.map((val) => (val - min) / range)
-    );
-
-    const result = predictFuture(trainedModel, normalizedInput, normParams, 7);
-    setPredictions(result);
   }, [parsedActivities]);
 
   // Triggers browser LSTM neural network training
