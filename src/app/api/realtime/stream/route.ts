@@ -10,6 +10,7 @@ export async function GET() {
   }
 
   const encoder = new TextEncoder();
+  let interval: any;
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -19,7 +20,8 @@ export async function GET() {
           const data = await getLatestGridData();
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
         } catch (err) {
-          console.error('Error in SSE data fetch:', err);
+          // Stream is closed, stop interval
+          clearInterval(interval);
         }
       };
 
@@ -27,19 +29,12 @@ export async function GET() {
       await sendUpdate();
 
       // Send updates every 15 seconds
-      const interval = setInterval(async () => {
-        try {
-          await sendUpdate();
-        } catch {
-          clearInterval(interval);
-          controller.close();
-        }
+      interval = setInterval(async () => {
+        await sendUpdate();
       }, 15000);
-
-      // Cleanup when connection closes
-      return () => {
-        clearInterval(interval);
-      };
+    },
+    cancel() {
+      clearInterval(interval);
     },
   });
 
