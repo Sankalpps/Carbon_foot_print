@@ -260,5 +260,24 @@ describe('Goals DAL', () => {
       // targetCo2 = 100 * (1 - 0.33) = 67
       expect(result!.targetCo2).toBe(67);
     });
+
+    it('should handle zero target reduction (divisor === 0)', async () => {
+      const goal = {
+        id: 'goal8',
+        userId: 'user1',
+        targetReduction: 0,
+        baselineCo2: 500,
+        startDate: new Date('2025-01-01'),
+        endDate: new Date('2026-12-31'),
+        createdAt: new Date(),
+      };
+      mockGoalFindFirst.mockResolvedValue(goal);
+      mockActivityFindMany.mockResolvedValue([{ co2Amount: 100 }]);
+
+      const result = await getGoalProgress('user1');
+      expect(result).not.toBeNull();
+      expect(result!.targetCo2).toBe(500);
+      expect(result!.progress).toBe(100);
+    });
   });
 });

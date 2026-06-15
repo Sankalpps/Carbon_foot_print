@@ -6,6 +6,7 @@ const mockFindMany = vi.fn();
 const mockFindUnique = vi.fn();
 const mockDelete = vi.fn();
 const mockCount = vi.fn();
+const mockUpdate = vi.fn();
 
 vi.mock('@/lib/db', () => ({
   db: {
@@ -15,6 +16,7 @@ vi.mock('@/lib/db', () => ({
       findUnique: (...args: unknown[]) => mockFindUnique(...args),
       delete: (...args: unknown[]) => mockDelete(...args),
       count: (...args: unknown[]) => mockCount(...args),
+      update: (...args: unknown[]) => mockUpdate(...args),
     },
   },
 }));
@@ -25,7 +27,9 @@ import {
   getActivityStats,
   getMonthlyBreakdown,
   deleteActivity,
+  updateActivity,
   getActivityCount,
+  getActivitiesByDateRange,
 } from '@/lib/dal/activities';
 
 /**
@@ -308,6 +312,80 @@ describe('Activities DAL', () => {
       mockCount.mockResolvedValue(0);
       const result = await getActivityCount('empty_user');
       expect(result).toBe(0);
+    });
+  });
+
+  // ── updateActivity ────────────────────────────────────────────────────────
+
+  describe('updateActivity', () => {
+    it('should throw if activity is not found', async () => {
+      mockFindUnique.mockResolvedValue(null);
+      await expect(
+        updateActivity('user1', 'act1', { amount: 100 })
+      ).rejects.toThrow('Activity not found or unauthorized');
+    });
+
+    it('should throw if activity belongs to another user', async () => {
+      mockFindUnique.mockResolvedValue({ id: 'act1', userId: 'other_user' });
+      await expect(
+        updateActivity('user1', 'act1', { amount: 100 })
+      ).rejects.toThrow('Activity not found or unauthorized');
+    });
+
+    it('should call update with recalculated CO2 when amount and subCategory change', async () => {
+      mockFindUnique.mockResolvedValue({ id: 'act1', userId: 'user1', subCategory: 'car_petrol' });
+      mockUpdate.mockResolvedValue({ id: 'act1' });
+
+      await updateActivity('user1', 'act1', {
+        category: 'transport',
+        subCategory: 'car_diesel',
+        amount: 50,
+      });
+
+      expect(mockUpdate).toHaveBeenCalledWith({
+        where: { id: 'act1' },
+        data: {
+          category: 'transport',
+          subCategory: 'car_diesel',
+          unit: 'km',
+          amount: 50,
+          co2Amount: 0.17 * 50, // car_diesel factor is 0.17
+        },
+      });
+    });
+
+    it('should call update with recalculated CO2 using old subCategory if only amount changes', async () => {
+      mockFindUnique.mockResolvedValue({ id: 'act1', userId: 'user1', subCategory: 'car_petrol' });
+      mockUpdate.mockResolvedValue({ id: 'act1' });
+
+      await updateActivity('user1', 'act1', { amount: 50 });
+
+      expect(mockUpdate).toHaveBeenCalledWith({
+        where: { id: 'act1' },
+        data: {
+          amount: 50,
+          co2Amount: 0.21 * 50, // car_petrol factor is 0.21
+        },
+      });
+    });
+  });
+
+  // ── getActivitiesByDateRange ──────────────────────────────────────────────
+
+  describe('getActivitiesByDateRange', () => {
+    it('should find activities within date range', async () => {
+      mockFindMany.mockResolvedValue([]);
+      const start = new Date('2025-01-01');
+      const end = new Date('2025-01-07');
+
+      await getActivitiesByDateRange('user1', start, end);
+
+      expect(mockFindMany).toHaveBeenCalledWith({
+        where: {
+          userId: 'user1',
+          date: { gte: start, lt: end },
+        },
+      });
     });
   });
 });
