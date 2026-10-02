@@ -56,7 +56,33 @@
   text-align: center;
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.demoBadge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
   margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-md);
+  border: 1px solid hsla(150, 60%, 45%, 0.4);
+  border-radius: var(--radius-md);
+  background: rgba(22, 163, 74, 0.08);
+  color: var(--text-primary);
+}
+
+.demoBadgeLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary-light);
+}
+
+.demoBadgeValue {
+  font-size: var(--font-size-sm);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  word-break: break-word;
 }
 
 .form {

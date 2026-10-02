@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: carbonwise
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: |
+      npm install
+      npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: NEXTAUTH_URL
+        value: https://your-app-name.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: carbonwise-db
+          property: connectionString
+
+ databases:
+  - name: carbonwise-db
+    databaseName: carbonwise
+    user: carbonwise
+    plan: free

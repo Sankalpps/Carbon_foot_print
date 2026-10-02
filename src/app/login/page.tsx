@@ -6,6 +6,11 @@ import { useRouter } from 'next/navigation';
 import { login } from '@/app/actions/auth';
 import styles from './page.module.css';
 
+const DEMO_ACCOUNT = {
+  email: 'demo@carbonwise.com',
+  password: 'password123',
+};
+
 /**
  * Login page component.
  * Client component that handles email/password authentication
@@ -15,8 +20,8 @@ export default function LoginPage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(DEMO_ACCOUNT.email);
+  const [password, setPassword] = useState(DEMO_ACCOUNT.password);
   const [error, setError] = useState<string | null>(null);
 
   /**
@@ -66,6 +71,13 @@ export default function LoginPage() {
         <p className={styles.authSubtitle}>
           Sign in to continue tracking your carbon footprint
         </p>
+
+        <div className={styles.demoBadge} role="note" aria-label="Recommended demo account">
+          <span className={styles.demoBadgeLabel}>Recommended demo account</span>
+          <span className={styles.demoBadgeValue}>
+            {DEMO_ACCOUNT.email} / {DEMO_ACCOUNT.password}
+          </span>
+        </div>
 
         {/* Error message */}
         {error && (
